@@ -139,4 +139,8 @@ namespace Tetris
     Metoda Move(int rows, int columns),która przesuwa blok o podana ilosc wierszy i kolumn.
     
     Metoda Reset(), która resetuje rotacje bloku i pozycję do wartości początkowych.
+
+
+    ------CZWARTA KLASA----------
+    11.00: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
