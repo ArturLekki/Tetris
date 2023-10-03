@@ -108,4 +108,35 @@ namespace Tetris
  *   ------DRUGA KLASA----------
  *  Do reprezentacji pozycji(komórki w gridzie) sluzy klasa Position
     Przechowuje wiersz i kolumnę, oraz konstruktor zapisujący te dane.
+
+
+    ------TRZECIA KLASA----------
+    Block - klasa abstrakcyjna bedąca wzorem dla klas dziedziczących, które bedą już
+    konkretnym kształtem bloku. Ta klasa zawiera dane dla kazdego bloku czyli:
+    1. Position[][] Tiles { get; }- pozycja  bloku - tablica 2-wymairowa zawierająca
+    bounding box bloku czyli jego pozycje w kazdej z 4 faz.
+    2. Position StartOffset { get; }- Początkowe przesunięcie tego bloku 
+    (wraz z bounding boxem) - decyduje gdzie blok sie zrespi na głównej siatce (game grid).
+    3. int Id { get; } - ktore okresla konkretny rodzaj bloku
+    4.  int rotationState;- Obecna faza bloku (czyli jaki kąt ma atkualnie)
+    5. Position offset; - Obecne przesunięcie bloku (czyli jaka pozycja jego bounding boxa 
+    jest - wg. top left corner)
+
+    W konstruktorze ustawiane jest przesunięcie atkualne na wartości poczatkowe czyli
+    poczatkowe przesuniecie
+
+    Metoda TilePositions(), która zwraca pozycję w siatce GridGame okupowaną przez dany 
+    blok i z daną jego fazą (czyli jego kątem obrotu) i jego aktualnym przesunięciem.
+    Metoda ta loopuje przez pozycję komórek w obecnym stanie rotacji i dodaje przesunięcie
+    wiersza i kolumny.
+
+    Metoda RotateCW(), która obraca blok o 90 stopni wg wskazówek zegara (w prawo). Robi się
+    to przez inkrementowanie aktualnego stanu rotacji (określany prez wartości od 0).
+
+    Metoda RotateCCW(), któa obraca blok o 90 stopni przeciwnie do wskazówek zegara 
+    (w lewo).
+
+    Metoda Move(int rows, int columns),która przesuwa blok o podana ilosc wierszy i kolumn.
+    
+    Metoda Reset(), która resetuje rotacje bloku i pozycję do wartości początkowych.
 */
