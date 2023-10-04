@@ -201,6 +201,6 @@ namespace Tetris
     1. Inicjuje następny blok jako random blok uzywając metody RandomBlock()
 
 
-    12.50: https://www.youtube.com/watch?v=jcUctrLC-7M
+    14.20: https://www.youtube.com/watch?v=jcUctrLC-7M
     
 */
