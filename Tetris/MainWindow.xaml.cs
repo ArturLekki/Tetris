@@ -24,6 +24,11 @@ namespace Tetris
         {
             InitializeComponent();
         }
+
+        private void GameCanvas_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
 
@@ -253,8 +258,28 @@ namespace Tetris
 
 ---SEKCJA SZÓSTA USER INTERFACE------
 
-    MainWindow.xaml
+    MainWindow.xaml - główne okno aplikacji. W atrybucie <Window>:
+    1. ustawiamy tytuł szerokosc/wys okna, kolory
+    2. KeyDown="Window_KeyDown"- Dodajemy KeyDownEvent -a by wykryć kiedy user naciśnie 
+    klawisz.
+
+    W atrybucie <Grid>:
+    1. Ustawiamy definicje wierszy i kolumn
+    2. Ustawiamy obraz z folderu Assets jako tło
+    3. Ustawiamy atrybut CANVAS. Siatka gry będzie tu rysowana  w 
+    wierszu 1 i kolumnie 1. Szerokosc elementu canvas=250 i height=500 co daje 25pikseli
+    na widoczną komórkę w siatce gry.
+    4. Opakowanie elementu Canvas w element viewBox ponieważ przy zmianie rozmiaru okna
+    nasz canvas nie zmienia rozmiaru. Teraz trzeba przenieść z canvas atrybuty:
+         Grid.Row="1" oraz Grid.Column="1" do elementu ViewBox. Od teraz canvas skaluje się
+    razem z oknem.
+    5. Dodanie do elementu canvas atrubutu ClipToBounds - zapewnia ze kazde dziecko ktore
+    rozszerza poza granicami canvas nie bedzie pokazany(potrzebne dla hidden rows)
+    6. Dodanie do elementu canvas atrybutu Loaded-wyzwalane, gdy dany element Canvas oraz
+    wszystkie jego elementy podrzędne zostają załadowane i są gotowe do wyświetlenia na 
+    interfejsie użytkownika.
+    7. Wyświetlanie wyniku ponad GameGridem
 
 
-19.07: https://www.youtube.com/watch?v=jcUctrLC-7M
+21.37: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
