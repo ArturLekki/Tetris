@@ -141,6 +141,47 @@ namespace Tetris
     Metoda Reset(), która resetuje rotacje bloku i pozycję do wartości początkowych.
 
 
+
+---SEKCJA DRUGA KLASY POCHODNE---------------------------------------------------------------
+
+
     ------CZWARTA KLASA----------
-    11.00: https://www.youtube.com/watch?v=jcUctrLC-7M
+    Block_i, która dziedziczy po klasie abstrakcyjnej Block. Posiada nastepujące pola:
+    1. Position[][] tiles- pozycję komórek(tiles) dla wszystkich 4 rotacji bloku. Tablica 
+    dwuwymiarowa , gdzie pierwszy wymiar stanowi obiekt zawierający dany zestaw rotacji,
+    a drugi wymiar to juz wartości tego zestawu.
+    2. Wypełnione właściwości: TZN:  int Id => 1; bo ta wartosc reprezentuje blok "i".
+    3. Position StartOffset => new Position(-1, 3); Początkowe przesunięcie (-1,3) Aby blok 
+    spawn był na środku topowego wiersza.
+    4. Position[][] Tiles => tiles; - dla tej wlasciwosci z klasy bazowej zwracamy tablice
+    która jest stworzona powyżej czyli: Position[][] tiles.
+
+    Klasa ta dziedziczy z klasy bazowej(która jest abstract), do pól i wlaściwosci ktore 
+    odziedziczyła tylko wypełnia je wartościami(te abstrakcyjne pola i metody itd musza 
+    byc tylko implementowane). Nie ma tutaj metod i konstruktora ponieważ funkcjonalności
+    dziedziczy z klasy bazowej. Tutaj jest tylko wypełnienie wartościami pól i propów.
+    
+
+
+    ------PIĄTA KLASA----------
+    Block_o, jest unikatowy ponieważ okupuje te same pozycje w każdym stanie rotacji,
+    Można by skopiowawc i wkleić te same pozycje 4 razy, ale bedzie działać jeśli wprowadzi
+    się tylko 1 stan rotacji. Ta klasa też dziedziczy z klasy abstrakcyjnej Block i 
+    wypełnia pola i właściwości abstrakcyjne(bo te śa wymuszane z klasy bazowej) 
+    wartościami.
+
+    1. Position[][] tiles - okresla pozycję komórek(tiles) dla wszystkich 4 rotacji bloku.
+    Tablica  dwuwymiarowa , gdzie pierwszy wymiar stanowi obiekt zawierający dany
+    zestaw rotacji, a drugi wymiar to juz wartości tego zestawu.
+    2. int Id => 4; bo ta wartosc reprezentuje blok "o".
+    3. Position StartOffset => new Position(0, 4); - Początkowe przesunięcie
+    4. Position[][] Tiles => tiles; dla tej wlasciwosci z klasy bazowej zwracamy tablice
+    która jest stworzona powyżej czyli: Position[][] tiles.
+
+
+
+    ------KLASY POCHODNE POZOSTAŁE TAK SAMO, TYLKO ZMIANA WARTOŚCI----------
+
+    12.50: https://www.youtube.com/watch?v=jcUctrLC-7M
+    
 */

@@ -64,6 +64,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Block.cs" />
+    <Compile Include="Block_i.cs" />
+    <Compile Include="Block_j.cs" />
+    <Compile Include="Block_l.cs" />
+    <Compile Include="Block_o.cs" />
+    <Compile Include="Block_s.cs" />
+    <Compile Include="Block_t.cs" />
+    <Compile Include="Block_z.cs" />
     <Compile Include="GameGrid.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
