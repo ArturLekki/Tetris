@@ -244,5 +244,17 @@ namespace Tetris
     wywołujemy placeBlock() w miejscu gdy obecny blok nie moze byc przesuniety na dół.
     
 
-18.00: https://www.youtube.com/watch?v=jcUctrLC-7M
+
+---SEKCJA PIĄTA FOLDER ASSETS I SKOPIOWANIE DO NIEGO GRAFIK------
+
+    Oprócz tego kazda grafika we właściwościach ma zaznaczoną opcję: Build Action: Resource
+
+
+
+---SEKCJA SZÓSTA USER INTERFACE------
+
+    MainWindow.xaml
+
+
+19.07: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
