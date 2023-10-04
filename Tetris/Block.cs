@@ -29,7 +29,7 @@ namespace Tetris
 
         #endregion
 
-        #region METODY
+        #region METODY - LOGIKA DLA KAŻDEGO Z BLOKÓW
 
         public IEnumerable<Position> TilePositions()
         {

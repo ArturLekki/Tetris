@@ -28,7 +28,7 @@ namespace Tetris
 }
 
 /*
- * ------SEKCJA 1-----------
+----------SEKCJA 1 OGÓLNE INFORMACJE I KLASY BAZOWE-----------
  * 
  *   Tetris opeira sie na siatce (grid) 20 wierszy i 10 kolumn. Ale na samej górze
  *   dodajemy 2 dodatkowe wiersze, aby spawnować bloki(te 2 wiersze beda ukryte).
@@ -142,7 +142,7 @@ namespace Tetris
 
 
 
----SEKCJA DRUGA KLASY POCHODNE---------------------------------------------------------------
+---SEKCJA DRUGA KLASY POCHODNE-----------------------------------------------------------
 
 
     ------CZWARTA KLASA----------
@@ -179,8 +179,27 @@ namespace Tetris
     która jest stworzona powyżej czyli: Position[][] tiles.
 
 
-
     ------KLASY POCHODNE POZOSTAŁE TAK SAMO, TYLKO ZMIANA WARTOŚCI----------
+
+
+
+---SEKCJA TREZCIA KLASA KOLEJKOWANIA BLOKÓW---------------------------------------
+
+
+    BlockQueue - klasa odpowiedzialna za wybieranie następego w grze. Zawiera pola: 
+    1. Block[] blocks - tablicę bloków z instancją wszystkich 7 rodzajów bloków, które 
+    będą używane.
+    2. Random random = new Random(); - obiekt do losowania random
+    3. Block Nextblock { get; private set; }- właściwosc dla następnego bloku w kolejce
+
+    Metody:
+    1.  RandomBlock()- metoda zwracająca randomowy block z tablicy bloków
+    2. GetAndUpdate()- zwraca następny blok i aktualizuje właściwość. Metoda wybiera tak
+    długo az wybierze inny, aby nie powtarzał się jeden po drugim
+
+    Konstruktor: 
+    1. Inicjuje następny blok jako random blok uzywając metody RandomBlock()
+
 
     12.50: https://www.youtube.com/watch?v=jcUctrLC-7M
     
