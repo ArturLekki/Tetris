@@ -73,6 +73,7 @@
     <Compile Include="Block_t.cs" />
     <Compile Include="Block_z.cs" />
     <Compile Include="GameGrid.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

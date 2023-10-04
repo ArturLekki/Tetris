@@ -201,6 +201,48 @@ namespace Tetris
     1. Inicjuje następny blok jako random blok uzywając metody RandomBlock()
 
 
-    14.20: https://www.youtube.com/watch?v=jcUctrLC-7M
     
+    
+
+---SEKCJA CZWARTA KLASA GAMESTATE - KLASA ŁĄCZĄCA WSZYSTK0 CO STWORZONE DO TERAZ------
+
+    Zawiera pola:
+    1. Block currentBlock; - to pole zawiera tez zdefiniowaną właściwosc get i set, 
+    w której gdy aktualizujemy wartość tego pola to wywołujemy metodę Reset()(można bo
+    pole jest typu block i to metoda z tej klasy). Metoda ta ustawia poprawnie startową 
+    pozycję i rotation obecnego bloku.
+    2. public GameGrid GameGrid { get; }- propertis dla pobrania siatki gry.
+    3. BlockQueue BlockQueue { get; }- propertis dla pobrania następnego bloku.
+    4. bool GameOver { get; private set; }- propertis dla ustawienia czy gra sie skonczyła.
+
+    Konstruktor:
+    1. Inicjuje gameGrid z 22 wierszy i 10 kolumn.
+    2. Inicjuje blockQueue aby uzyc randomowego bloku dla currentBlock właściwości.
+
+    Metody:
+    1. BlockFits()- sprawdza czy obecny blok jest w legalnej pozycji czy nie. Loopuje ona
+    przez pozycje komórek obecnego bloku i jesli ktoraś komórka jest poza gridem lub 
+    nakłada się na inną komórkę to zwraca false. Jesli jednak cała petle przejdzie OK
+    to wraca true;
+    2. RotateBlockCW()- obraca obecny blok wg wskazówek zegara ale tylko gdy jet to możliwe
+    Jeśli nie jest to możliwe to obraca go spowrotem do poprzedniej pozycji dzieki metodzie
+    CurrentBlock.RotateCCW();
+    3. RotateBlockCCW()- obraca obecny blok przeciwnie do wskazówek zegara ale tylko 
+    gdy jet to możliwe. DZiała analogicznie do metody powyżej: RotateBlockCW().
+    4. MoveBlockLeft()- sterowanie blokiem w lewo. Stratgia taka sama jak w metodach wyżej. 
+    jesli ruszy się do nielegalnej pozycji to wróci go spowrotem.
+    5. MoveBlockRight()- sterowanie blokiem w prawo. Stratgia taka sama jak w metodach 
+    wyżej. jesli ruszy się do nielegalnej pozycji to wróci go spowrotem.
+    6. IsGameOver()- sprawdza czy gra jest skonczona. Gdy któryś z ukrytych wierszy na 
+    samej górze NIE jest pusty to gra jest przegrana.
+    7. PlaceBlock()- wywołana gdy currentBlock nie może być przesunięty na dół.
+    Najpierw loopuje przez pozycje komórek obecnego bloku i ustawia jego pozycje w gameGrid
+    na podstawie ID danego bloku. Potem czyści każdy potencjalny pełny wiersz. I sprawdza
+    czy gra jest skończona. Jesli tak to ustawia własciwosc gameOver na true. Jeśli nie to
+    uaktualnia obecny blok.
+    8. MoveBlockDown() -przesuwa blok na dół. Działa tak samo jak inne metody move tylko 
+    wywołujemy placeBlock() w miejscu gdy obecny blok nie moze byc przesuniety na dół.
+    
+
+18.00: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
