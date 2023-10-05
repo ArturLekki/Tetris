@@ -20,15 +20,118 @@ namespace Tetris
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region POLA / WŁAŚCIWOŚCI
+
+        private readonly ImageSource[] tileImages = new ImageSource[]
+        {
+            new BitmapImage(new Uri("Assets/TileEmpty.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TileCyan.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TileBlue.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TileOrange.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TileYellow.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TileGreen.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TilePurple.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/TileRed.png", UriKind.Relative)),
+        };
+
+        private readonly ImageSource[] blockImages = new ImageSource[]
+        {
+            new BitmapImage(new Uri("Assets/Block-Empty.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/Block-I.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/Block-J.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/Block-L.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/Block-O.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/Block-S.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/Block-T.png", UriKind.Relative)),
+            new BitmapImage(new Uri("Assets/Block-Z.png", UriKind.Relative)),
+        };
+
+        private readonly Image[,] imageControls;
+
+        private GameState gameState = new GameState();
+
+        #endregion
+
+        #region KONSTRUKTORY
+
         public MainWindow()
         {
             InitializeComponent();
+            imageControls = SetupGameCanvas(gameState.GameGrid);
+        }
+
+        #endregion
+
+
+        #region METODY - CZYLI ZDARZENIA / EVENTY W MAIN WINDOW
+
+        private Image[,] SetupGameCanvas(GameGrid grid)
+        {
+            Image[,] imageControls = new Image[grid.Rows, grid.Columns];
+            int cellSize = 25;
+
+            for (int r = 0; r < grid.Rows; r++)
+            {
+                for (int c = 0; c < grid.Columns; c++)
+                {
+                    Image imageControl = new Image
+                    {
+                        Width = cellSize,
+                        Height = cellSize
+                    };
+
+                    Canvas.SetTop(imageControl, (r - 2) * cellSize);
+                    Canvas.SetLeft(imageControl, c * cellSize);
+                    GameCanvas.Children.Add(imageControl);
+                    imageControls[r,c] = imageControl;
+                }
+            }
+
+            return imageControls;
+        }
+
+        private void DrawGrid(GameGrid grid)
+        {
+            for(int r = 0; r < grid.Rows; r++)
+            {
+                for(int c = 0; c < grid.Columns; c++)
+                {
+                    int id = grid[r, c];
+                    imageControls[r,c].Source = tileImages[id];
+                }
+            }
+        }
+
+        private void DrawBlock(Block block)
+        {
+            foreach(Position p in block.TilePositions())
+            {
+                imageControls[p.Row, p.Column].Source = tileImages[block.Id];
+            }
+        }
+
+        private void Draw(GameState gameState)
+        {
+            DrawGrid(gameState.GameGrid);
+            DrawBlock(gameState.CurrentBlock);
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
 
         private void GameCanvas_Loaded(object sender, RoutedEventArgs e)
         {
+            Draw(gameState);
+        }
+
+        private void PlayAgain_Click(object sender, RoutedEventArgs e)
+        {
 
         }
+
+        #endregion
     }
 }
 
@@ -286,8 +389,52 @@ namespace Tetris
     więc ustawiamy w nim atrybut visibility="hidden"
 
 
----SEKCJA SIÓDMA CODE BEHIND------
+---SEKCJA SIÓDMA CODE BEHIND czyli plik MainWindow.xaml.cs (nie uzywamy tu MVVM pattern)--
+
+    POLA WEWNĄTRZ KLASY MAINWINDOW:
+
+    1. ImageSource[] tileImages = new ImageSource[]- Ustawiamy tablicę zawierającą obrazki 
+    kafelek(komórek). Kolejność dodawania obrazków do tablic nie jest randomowa. W indeksie 
+    0 jest obrazek pustego kafelka. A kolejność następnyych brazków jest pasująca z ID 
+    bloków. Przykład: blok"i" ma id=1 i powinien miec kolor Cyan, wiec w tej tablicy mamy
+    w indeksie 1 ten obrazek o kolorze cyan.
+    2. ImageSource[] blockImages = new ImageSource[]- Ustawiamy tablicę zawierającą obrazki
+    dla całych bloków. Bedzie to uzywane do pokazania obecnego bloku oraz jaki bedzie next.
+    Tutaj tez kolejnosc dodawania do tablicy jest pasujaca z ID bloków.
+    3. Image[,] imageControls;- Ustawiamy tablicę kontroli obrazków.
+    Działanie to: jest jedna kontrola obrazu na każdą komórkę w siatce gry.
+    4. GameState gameState = new GameState();-Ustawiamy obiekt ktory jest stanem gry.
+
+    METODY:
+    1. SetupGameCanvas(GameGrid grid) -ustawia kontrole obrazu w elemencie canvas.
+    Tablica ImageContntrols bedzie miala 22wiersze i 10 kolumn tak samo jak siatka gry.
+    Następnie zmienna dla width i height każdej komórki, która wynosi 25(bo canvas width
+    jest 250 i canvas height=500, co daje 25 pikseli dla kazdej widocznej komórki).
+    Nastepnie loopuje przez kazdy wiersz i kolumnę w siatce gry, gdzie dla kazdej pozycji
+    tworzy kontrole obrazu z width=25 i height=25. Nastepnie ustawiamy pozycję kontroli
+    obraz poprawnie(liczymy wiersze od góry do dołu, a kolumny od lewej do prawej), wiec
+    ustawiamy dystans od góry elementu canvas do góry obrazu równe: (r-2)*cellSize.
+    -2 jest po to aby wypchnąć najwyzsze ukryte wiersze do góry, dzieki temu nie są w 
+    elemencie canvas. Podobnie dystans od lewej strony elementu canvas do lewej strony
+    obrazu: c * cellSize. Nastepnie robimy obraz jako wykres elementu canvas i dodajemy go
+    do tablicy, która bedzie zwrócona poza pętlą już. Od tego momentu mamy dwu-wymarową
+    tablicę z jedym obrazem dla kazdej komórki dla siatki gry. Dwa top wiersze uzywane do
+    spawnowania bloków są ustawione ponad elementem canvas, dzieki temu są ukryte.
+
+    2. DrawGrid(GameGrid grid)- rysuje siatkę gry w elemencie canvas. Loopuje przez 
+    wszystkie pozycje, i dla kazdej pozycji pobiera startowe ID i ustawia źródło obrazu
+    na danej pozycji używając ID.
+
+    3. DrawBlock(Block block)- rysuje obecny blok. Trzeba loopować po pozycje komórek
+    i uaktualniać źródło obrazu takim samym sposobem jak w metodzie DrawGrid.
+
+    4. Draw(); - metoda łączy rysowanie siatki gry i bloku razem. Wywołanie tej metody
+    w momencie gdy element canvast jest w pełni załadowany(Loaded) - czyli w zdarzeniu
+    GameCanvas_Loaded(object sender, RoutedEventArgs e).
+
+    KONSTRUKTOR:
+    1. inicjuje tablicę kontroli obrazów za pomocą wywołania metody:SetupGameCanvas()
 
 
-23.46: https://www.youtube.com/watch?v=jcUctrLC-7M
+28.11: https://www.youtube.com/watch?v=jcUctrLC-7M
 */

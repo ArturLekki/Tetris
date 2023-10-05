@@ -76,7 +76,7 @@
                    Width="125"/>
         </StackPanel>
         
-        <!-- END GAME MENU -->
+        <!-- END GAME MENU - hidden by default -->
         <Grid x:Name="GameOverMenu"
               Background="#cc000000"
               Grid.RowSpan="2"
