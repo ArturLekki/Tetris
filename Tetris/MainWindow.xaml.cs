@@ -116,19 +116,61 @@ namespace Tetris
             DrawBlock(gameState.CurrentBlock);
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        private async Task GameLoop()
         {
+            Draw(gameState);
 
+            while(!gameState.GameOver)
+            {
+                await Task.Delay(500);
+                gameState.MoveBlockDown();
+                Draw(gameState);
+            }
+
+            GameOverMenu.Visibility = Visibility.Visible;
         }
 
-        private void GameCanvas_Loaded(object sender, RoutedEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            if(gameState.GameOver)
+            {
+                return;
+            }
+
+            switch(e.Key)
+            {
+                case Key.Left:
+                    gameState.MoveBlockLeft();
+                    break;
+                case Key.Right:
+                    gameState.MoveBlockRight();
+                    break;
+                case Key.Down:
+                    gameState.MoveBlockDown();
+                    break;
+                case Key.Up:
+                    gameState.RotateBlockCW();
+                    break;
+                case Key.Z:
+                    gameState.RotateBlockCCW();
+                    break;
+                default:
+                    return;
+            }
+
             Draw(gameState);
         }
 
-        private void PlayAgain_Click(object sender, RoutedEventArgs e)
+        private async void GameCanvas_Loaded(object sender, RoutedEventArgs e)
         {
+            await GameLoop();
+        }
 
+        private async void PlayAgain_Click(object sender, RoutedEventArgs e)
+        {
+            gameState = new GameState();
+            GameOverMenu.Visibility = Visibility.Hidden;
+            await GameLoop();
         }
 
         #endregion
@@ -432,9 +474,29 @@ namespace Tetris
     w momencie gdy element canvast jest w pełni załadowany(Loaded) - czyli w zdarzeniu
     GameCanvas_Loaded(object sender, RoutedEventArgs e).
 
+    5. Window_KeyDown(object sender, KeyEventArgs e)- jest to event dodany do elementu 
+    Window. Najpierw dodanie zabezpiecznia(if) gdy gra jest skonczona, wcisnięcie klawisza 
+    jakiegokolwiek nie powinno nic robić. Uzyjemy tutaj klawiszy strzałek(switch) 
+    do ruchu blokiem. Strzałka do góry obraca blok wg wskazówek zegara, a klawisz Z przeci-
+    wnie do ruchu wskazowek zegara.Default w tym switchu sprawia, że reDraw robiony jest
+    gdy user wciśnie klawisz który cos robi, a nie jakis przypadkowy.
+    Poza switchem wywołujemy metodę Draw().
+
+    6. async Task GameLoop()- metoda musi byc asynchroniczna aby moc poczekać bez blokowa-
+    nia user interfajsu. Najpier rysuje stan gry. Potem petla leci az do mementu gameOvera.
+    W ciele petli czekamy 500ms, przesuwamy blok na dół, i rysujemy na nowo. Po za pętlą
+    ustawiamy widoczność Menu dla końca gry na visible. GameLoop jest
+    startowane gdy Element canvas jest Loaded. Dlatego trzeba zmienić metodę GameCanvas na
+    metode asynchroniczną z uzyciem słów async i await i tam wywołać metodę GameLoop();
+
+    7. async void PlayAgain_Click(object sender, RoutedEventArgs e) - Tworzy nowy obiekt
+    klasy GameState, chowa element GameOverMenu i restartuje GameLoop.
+
     KONSTRUKTOR:
     1. inicjuje tablicę kontroli obrazów za pomocą wywołania metody:SetupGameCanvas()
 
 
-28.11: https://www.youtube.com/watch?v=jcUctrLC-7M
+
+
+31.05: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
