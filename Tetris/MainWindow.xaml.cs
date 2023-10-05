@@ -278,8 +278,16 @@ namespace Tetris
     6. Dodanie do elementu canvas atrybutu Loaded-wyzwalane, gdy dany element Canvas oraz
     wszystkie jego elementy podrzędne zostają załadowane i są gotowe do wyświetlenia na 
     interfejsie użytkownika.
-    7. Wyświetlanie wyniku ponad GameGridem
+    7. Wyświetlanie wyniku ponad GameGridem. TextBlock w wierszu 0 i kolumnie 1. W wierszu
+    1 i kolumnie 0 pokazujemy jaki blok jest obecnie
+    8. Z lewej strony stack panel wyswietlajacy obecny blok
+    9. Z prawej strony stack panel wyswietlajacy jaki będzie następny blok
+    10. Game Over menu(nowy grid) - pokazuje wynik i button do restartu gry. Domyślnie musi być ukryte
+    więc ustawiamy w nim atrybut visibility="hidden"
 
 
-21.37: https://www.youtube.com/watch?v=jcUctrLC-7M
+---SEKCJA SIÓDMA CODE BEHIND------
+
+
+23.46: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
