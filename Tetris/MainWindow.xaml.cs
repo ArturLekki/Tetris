@@ -80,7 +80,7 @@ namespace Tetris
                         Height = cellSize
                     };
 
-                    Canvas.SetTop(imageControl, (r - 2) * cellSize);
+                    Canvas.SetTop(imageControl, (r - 2) * cellSize + 10);
                     Canvas.SetLeft(imageControl, c * cellSize);
                     GameCanvas.Children.Add(imageControl);
                     imageControls[r,c] = imageControl;
@@ -110,10 +110,17 @@ namespace Tetris
             }
         }
 
+        private void DrawNextBlock(BlockQueue blockQueue)
+        {
+            Block next = blockQueue.Nextblock;
+            NextImage.Source = blockImages[next.Id];
+        }
+
         private void Draw(GameState gameState)
         {
             DrawGrid(gameState.GameGrid);
             DrawBlock(gameState.CurrentBlock);
+            DrawNextBlock(gameState.BlockQueue);
         }
 
         private async Task GameLoop()
@@ -492,11 +499,25 @@ namespace Tetris
     7. async void PlayAgain_Click(object sender, RoutedEventArgs e) - Tworzy nowy obiekt
     klasy GameState, chowa element GameOverMenu i restartuje GameLoop.
 
+    8. DrawNextBlock(BlockQueue blockQueue)-zapowiada jaki będzie następny blok oraz trzeba
+    wywołać te metodę w metodzie Draw();
+
     KONSTRUKTOR:
     1. inicjuje tablicę kontroli obrazów za pomocą wywołania metody:SetupGameCanvas()
 
 
 
+---SEKCJA 8, POPRAWKI ---
 
-31.05: https://www.youtube.com/watch?v=jcUctrLC-7M
+    1. Poprawa spawn pozycji bloku w klasie GameState w konstruktorze (Dodanie Fora z ifem)
+    Obecnie blok spawnuje się w dwoch ukrytych wierszach, ale wstawimy odstep w wiersach
+    2 i 3 do top widocznych wierszy.
+
+    2. Druga poprawka to gdy Gra jest skonczona to nie widac ktory blok nas zabił. Mozna to
+    naprawic pokazujac kilka pikseli wiersza 1 ktory jest obecnie ukryty. Czyli otwieramy
+    MainWindow.xaml i trzeba zmienic wysokość=510 w elemencie Canvas. 
+    A w CodeBehind w metodzie SetupGameCanvas(): gdy pozycjonujemy obrazki pionowo dodamy
+    10 pikseli. OD teraz widać kawałek ukrytego wiersza o numerze 1 na samej górze.
+
+32.49: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
