@@ -116,11 +116,25 @@ namespace Tetris
             NextImage.Source = blockImages[next.Id];
         }
 
+        private void DrawHeldBlock(Block heldBlock)
+        {
+            if(heldBlock == null)
+            {
+                HoldImage.Source = blockImages[0];
+            }
+            else
+            {
+                HoldImage.Source = blockImages[heldBlock.Id];
+            }
+        }
+
         private void Draw(GameState gameState)
         {
             DrawGrid(gameState.GameGrid);
             DrawBlock(gameState.CurrentBlock);
             DrawNextBlock(gameState.BlockQueue);
+            DrawHeldBlock(gameState.HeldBlock);
+            ScoreText.Text = $"Score: {gameState.Score}";
         }
 
         private async Task GameLoop()
@@ -135,6 +149,7 @@ namespace Tetris
             }
 
             GameOverMenu.Visibility = Visibility.Visible;
+            FinalScoreText.Text = $"Score: {gameState.Score}";
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -160,6 +175,9 @@ namespace Tetris
                     break;
                 case Key.Z:
                     gameState.RotateBlockCCW();
+                    break;
+                case Key.C:
+                    gameState.HoldBlock();
                     break;
                 default:
                     return;
@@ -519,5 +537,30 @@ namespace Tetris
     A w CodeBehind w metodzie SetupGameCanvas(): gdy pozycjonujemy obrazki pionowo dodamy
     10 pikseli. OD teraz widać kawałek ukrytego wiersza o numerze 1 na samej górze.
 
-32.49: https://www.youtube.com/watch?v=jcUctrLC-7M
+
+---SEKCJA 9, WYNIK GRY, HOLD BLOCK - AKTUALIZACJA KLASY GAMESTATE I CODE BEHIND---
+
+    W KLASIE GAMESTATE:
+    1. Dodanie propertisa: int Score{get;set;}. Jest to całkowita liczba wyczyszczonych
+    wierszy.
+    2. w metodzie PlaceBlock() inkrementujemy tego propertisa za każdym razem gdy wiersz
+    jest czyszczony
+    3. W CodeBehind ustawiamy Score text w metodzie Draw();
+    4. Final score trzeba tez ustawić w menu końca gry. W Code Behind w metodzie GameLoop
+    Zaraz po linijce gdzie ustwaiamy menu na widoczne.
+    5. w klasie GameState Dodanie propertisa Block HeldBlock{get;private set;}
+    6. w klasie GameState Dodanie propertisa bool CanHold{get;private set;}
+    7. w klasie GameState W konstruktorze ustawiamy CanHold=true;
+    8. w klasie GameState tworzyy metode HoldBlock()- jesli nie mozna trzymac bloku to 
+    po prostu wychodzimy z mtody. Jeśli nie ma bloku w trzymaniu to ustawiamy trzymany
+    do aktualnego bloku, a obecny blok do nastepnego bloku. Jeśli jest blok(else) w 
+    oczekiwaniu trzeba zamienić obecny blok i ten trzymany. Na koncu ustawiamy 
+    canHold=false, zeby nie mozna było spamować trzymania.
+    9. w klasie GameState W metodzie PlaceBlock trzeba ustawić CanHold=true pod 
+    linijką gdzie update obecnego bloku jest.
+    10. W CodeBehind wywołujemy metodę HoldBlock gdy user naciśnie C
+    11. W CodeBehind Tworzymy metodę DrawHeldBlock(Block heldBlock) ktora pokazuje 
+    trzymany blok i wywołamy ją z metody Draw();
+
+35.37: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
