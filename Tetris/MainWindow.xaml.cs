@@ -97,6 +97,7 @@ namespace Tetris
                 for(int c = 0; c < grid.Columns; c++)
                 {
                     int id = grid[r, c];
+                    imageControls[r, c].Opacity = 1;
                     imageControls[r,c].Source = tileImages[id];
                 }
             }
@@ -106,6 +107,7 @@ namespace Tetris
         {
             foreach(Position p in block.TilePositions())
             {
+                imageControls[p.Row, p.Column].Opacity = 1;
                 imageControls[p.Row, p.Column].Source = tileImages[block.Id];
             }
         }
@@ -128,9 +130,21 @@ namespace Tetris
             }
         }
 
+        private void DrawGhostBlock(Block block)
+        {
+            int dropDistance = gameState.BlockDropDistance();
+
+            foreach(Position p in block.TilePositions())
+            {
+                imageControls[p.Row + dropDistance, p.Column].Opacity = 0.25;
+                imageControls[p.Row + dropDistance, p.Column].Source = tileImages[block.Id];
+            }
+        }
+
         private void Draw(GameState gameState)
         {
             DrawGrid(gameState.GameGrid);
+            DrawGhostBlock(gameState.CurrentBlock);
             DrawBlock(gameState.CurrentBlock);
             DrawNextBlock(gameState.BlockQueue);
             DrawHeldBlock(gameState.HeldBlock);
@@ -580,6 +594,15 @@ namespace Tetris
 
     Rozpoczęcie pracy nad: GHOST BLOCK- czyli pokaże w ktorym miejscu DropBlock spadnie 
     po wcisnieciu tej spacji.
+    1. w CodeBehind: DrawGhostBlock(Block block)- komórki gdzie blok wyląduje są lokalizowa
+    ne przez Drop dystans do pozycji komórek aktualnego bloku. Potem ustawiamy Opacity
+    kontroli danego obrazu. Potem aktualizacja źródła. Opacity to sztuczka, trzeba ją zre-
+    setować gdy rysowany jest siatka gry i nowy obecny blok - czyli w metodzie DrawGrid()
+    imageControls[r, c].Opacity = 1; Oraz w metodzie DrawBlock(Block block):
+    imageControls[p.Row, p.Column].Opacity = 1;
+    Wywołanie tej metody DrawGhostBlock będzie też w metodzie Draw() i musi zostać 
+    wywołana przed rysowaniem bloku. Od teraz widoczne jest gdzie wyląduje dany blok.
+    
 
     
 
