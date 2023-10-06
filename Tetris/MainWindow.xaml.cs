@@ -179,6 +179,9 @@ namespace Tetris
                 case Key.C:
                     gameState.HoldBlock();
                     break;
+                case Key.Space:
+                    gameState.DropBlock();
+                    break;
                 default:
                     return;
             }
@@ -562,5 +565,23 @@ namespace Tetris
     11. W CodeBehind Tworzymy metodę DrawHeldBlock(Block heldBlock) ktora pokazuje 
     trzymany blok i wywołamy ją z metody Draw();
 
-35.37: https://www.youtube.com/watch?v=jcUctrLC-7M
+
+---SEKCJA 10 HARD DROP FEATURE--------------------
+
+    Pozwala userowi nacisnąc jeden klawisz, który przesunie blok w dół nie tylko o 1 wiersz
+    ale o tyle ile jest to możliwe.
+    1. W klasie GameState: Tworzymy metodę pomocniczą TileDropDistance(Position p) -pobiera
+    pozycje i zwraca liczbę pustych komórek bezpośrednio pod tą pozycją. Ta metoda pozwala
+    określić ile wierszy obecny blok może przesunać na dół. Wywoołujemy ją dla każdej
+    komórki obecnego bloku i sprawdzamy mnimum w następnej metodzie: BlockDropDistance().
+    2. W klasie GameState: Potem tworzymy DropBlock() metodę -przesuwa w dół obecny blok
+    o tyle wierszy ile to mozliwe i układa go w siatce gry.
+    3. W CodeBehind: wywołujemy metodę DropBlock() gdy SPACE jest wciśnięty.
+
+    Rozpoczęcie pracy nad: GHOST BLOCK- czyli pokaże w ktorym miejscu DropBlock spadnie 
+    po wcisnieciu tej spacji.
+
+    
+
+37.05: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
