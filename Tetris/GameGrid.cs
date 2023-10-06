@@ -9,9 +9,10 @@ namespace Tetris
     public class GameGrid
     {
         #region POLA / WŁAŚCIWOŚCI / INDEKSERY
+
         private readonly int[,] grid;
         public int Rows { get; }
-        public int Columns { get; set; }
+        public int Columns { get; }
 
         
         public int this[int r, int c]
@@ -19,6 +20,7 @@ namespace Tetris
             get => grid[r, c];
             set => grid[r, c] = value;
         }
+
         #endregion
 
         #region KONSTRUKTORY
@@ -83,7 +85,7 @@ namespace Tetris
             }
         }
 
-        private void MoveDown(int r, int numRows)
+        private void MoveRowDown(int r, int numRows)
         {
             for (int c = 0; c < Columns; c++)
             {
@@ -105,7 +107,7 @@ namespace Tetris
                 }
                 else if(cleared > 0)
                 {
-                    MoveDown(r, cleared);
+                    MoveRowDown(r, cleared);
                 }
             }
 

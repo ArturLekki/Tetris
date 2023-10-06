@@ -265,7 +265,7 @@ namespace Tetris
  *   4. IsRowEmpty(int r)-sprawdza czy wiersz jest pusty
  *   5. ClearRow(int r)- czyści wiersz czyli po prostu ustawia wartość komórek w całym 
  *   wierszu na wartość = 0
- *   6. MoveDown(int r, int numRows)- przesuwa wiersz na dół o określona liczbę wierszy
+ *   6. MoveRowDown(int r, int numRows)- przesuwa wiersz na dół o określona liczbę wierszy
  *   7. ClearFullRows()- czyści pełne wiersze.
  *   
  *   Czyszczenie pełnego wiersza: użyjemy zmiennej zwanej Cleared, ktora zawiera ilosc

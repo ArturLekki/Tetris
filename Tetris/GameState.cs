@@ -63,7 +63,7 @@ namespace Tetris
         {
             foreach(Position p in CurrentBlock.TilePositions())
             {
-                if(GameGrid.IsEmpty(p.Row, p.Column))
+                if(!GameGrid.IsEmpty(p.Row, p.Column))
                 {
                     return false;
                 }
