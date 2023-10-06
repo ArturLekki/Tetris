@@ -47,6 +47,9 @@ namespace Tetris
         };
 
         private readonly Image[,] imageControls;
+        private readonly int maxDelay = 1000;
+        private readonly int minDelay = 75;
+        private readonly int delayDecrease = 25;
 
         private GameState gameState = new GameState();
 
@@ -157,7 +160,8 @@ namespace Tetris
 
             while(!gameState.GameOver)
             {
-                await Task.Delay(500);
+                int delay = Math.Max(minDelay, maxDelay - (gameState.Score * delayDecrease));
+                await Task.Delay(delay);
                 gameState.MoveBlockDown();
                 Draw(gameState);
             }
@@ -604,7 +608,21 @@ namespace Tetris
     wywołana przed rysowaniem bloku. Od teraz widoczne jest gdzie wyląduje dany blok.
     
 
-    
+---SEKCJA 11 ZWIEKSZANIE PREDKOSCI BLOKU WRAZ ZE WZROSTEM WYNIKU--------------------
 
-37.05: https://www.youtube.com/watch?v=jcUctrLC-7M
+    CODE BEHIND:
+    1. dodanie stałych 
+        private readonly int maxDelay = 1000;
+        private readonly int minDelay = 75;
+        private readonly int delayDecrease = 25;
+    2. W game loop dodajemy zmienną opóźniającą. Gdy gra się zaczyna delay bedzie ustawiony 
+    na maksymalna wartosc, na kazdy punkt user dostaje to delay jest zmniejszany. Ale nie
+    będzie nigdy nizszy niz jego ustawiona wartosc minimalna.
+
+
+---SEKCJA 12 DODANIE IKONY DO PROJEKTU----------
+
+    1. PPM->NA PROJEKT->PROPERTIES->APPLICATION->ICON & MANIFEST->ICON: Assets\Icon.ico
+
+38.11: https://www.youtube.com/watch?v=jcUctrLC-7M
 */
