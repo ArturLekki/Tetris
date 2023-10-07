@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Squirrel;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,12 +63,36 @@ namespace Tetris
         {
             InitializeComponent();
             imageControls = SetupGameCanvas(gameState.GameGrid);
+            AddVersionNumber(); // APP ADD VERSION NUMBER TO WINDOW TITLE
+            CheckForUpdates(); // APP UPDATE
         }
 
         #endregion
 
 
         #region METODY - CZYLI ZDARZENIA / EVENTY W MAIN WINDOW
+
+        // APP UPDATE
+        private async Task CheckForUpdates()
+        {
+            string serverAddr = @"https://awm-tec.pl/appupdates";
+            string localAddr = @"F:\Temp\Releases";
+
+            using (var manager = new UpdateManager(localAddr))
+            {
+                await manager.UpdateApp();
+            }
+        }
+
+        // APP ADD VERSION NUMBER TO WINDOW TITLE
+        private void AddVersionNumber()
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            this.Title += $" v.{versionInfo.FileVersion}";
+        }
+
 
         private Image[,] SetupGameCanvas(GameGrid grid)
         {
@@ -624,5 +650,88 @@ namespace Tetris
 
     1. PPM->NA PROJEKT->PROPERTIES->APPLICATION->ICON & MANIFEST->ICON: Assets\Icon.ico
 
-38.11: https://www.youtube.com/watch?v=jcUctrLC-7M
+
+
+---SEKCJA 13 DODANIE SQUIREL.WINDOWS INSTALLER + UPDATER----------
+
+    ---ETAP INSTALACJA + KONFIGURACJA---
+
+    Działanie: Po uruchomieniu aplikacji sprawdza czy jest nowa wersja i pobiera ją.
+    Po ponownym uruchomieniu aplikacji będzie dopiero nowa werjsa.
+
+    1. INSTALACJA PACZKI: PPM->Na PROJEKT->Manage Nuget packages->squirrel.windows->install
+    2. Storzenie miejsca, gdzie update aplikacji startuje, czyli sprawdza czy jest nowa
+    wersja aplikacji i jesli jest to ja pobierze i zainstaluje (np metoda startup). Lub
+    mozna zrobić button ktory wywoluje metode updatowania aplikacji. W przyadku WPF robię to
+    w MainWindow.xaml.cs w konstruktorze.
+    Pierwszym parametrem metody upadte wywołanej w konstruktorze jest ścieżka czyli gdzie
+    squirel ma sprawdzic czy wersja jest aktualna (tutaj moze to być serwer www lub lokal
+    nie-). 
+    3. Stworzenie lokalnie folderu dla aktualizacji F:\Temp\Releases ORAZ na moim serwerze
+    www folderu appupdates.
+    4. Edycja pliku Properties->AssemblyInfo.cs- zmiana wersji do:
+        [assembly: AssemblyVersion("1.0.0")]   <-- usunięcie Revision number
+        [assembly: AssemblyFileVersion("1.0.0")] <-- usunięcie Revision number
+
+
+    5. Tworzenie własnego NuGet package pliku(bo tego wlasnie squirel uzywa do updatów)
+    Trzeba pobrać z Microsoft Store->NuGet Package Explorer
+    5.1. Create a new package->Edit Metadata POLA WYAMAGANE
+        Id = to nazwa aplikacji(nie wolno spacji)
+        Version
+        Authors
+        Description
+    Save (Zapisać zmiany)
+    5.2. Teraz prawe okno w nuget package manager to Package contents - tutaj:
+    PPM->ADD NEW FOLDER-> Lib
+    Teraz PPM na Lib-> add new folder-> net48
+        Te dwa foldery to podstawowa struktura, a net48 oznacza wersje frameworka 4.8.*
+    5.3. Teraz z lokalizacji F:\Projekty_testowe\Tetris\Tetris\bin\Release 
+    KOPIUJEMY WSZYSTKO OPRÓCZ PLIKÓW Z ROZSZERZENIEM .pdb (bo te pliki sa uzywane do 
+    debugowania, tego nie chcemy w instalerze). Kopiujemy te pliki do folderu Lib/net48/
+
+    Teraz mamy wszystko Po lewej metadata po prawej kontent
+
+    5.4. Zapisujemy w miejscu gdzie jest SOLUCJA czyli(F:\Projekty_testowe\Tetris): 
+    File->Save->Tetris.1.0.0.nupkg
+    5.5. Teraz w Package manager Console odpalamy polecenie: 
+        Squirrel --releasify Tetris.1.0.0.nupkg
+
+    Efektem jest utworzenie w miejscu SOLUCJI folderu Releases , w którym jest plik:
+    setup.exe setup.msi, oraz Tetris-1.9.9-full.nupkg
+
+    Teraz WSZYSTKIE PLIKI Z FOLDERU RELEASES kopiujemy do folderu gdzie aplikacja będzie
+    sprawdzać czy sa nowe wersje do pobrania (u mnie lokalnie to: F:\Temp\Releases).
+
+    5.6. Kazda zmiana paczki nuget(zmieniłem tytuł w metadata)-> usunąć zawartośc z folderu 
+    solucji Releases/
+    Oraz uruchomic polecenie takie samo bez zmiany wersji:
+    Squirrel --releasify Tetris.1.0.0.nupkg
+    I teraz nowo utworzone pliki kopiuję do F:\Temp\Releases, skad uruchamiam instalacje.
+
+
+    5.7. Dodanie do tytułu okna palikacji numeru werji, nowa metoda oraz wywołanie jej 
+    w konstruktorze w CodeBehind.
+
+
+    ---ETAP JAK ZROBIĆ UPDATE---
+    5.8. Po zrobieniu zmiany w kodzie, zmieniamy na RELEASE mode. W Properties w 
+    AssemblyInfo.cs zmieniamy wersję na 1.0.1 (oba)
+    Build->Build Solution
+    Package Explorer->Open a local package->Tetris.1.0.0.nupkg->Edit metadata zmiana Wersji
+    Otwarcie całej solucji w file explorer i w lokacji: 
+    F:\Projekty_testowe\Tetris\Tetris\bin\Release szukamy wszystkie pliko ktore 
+    zostały zmienione i przeciagamy znowu do package explorer do Lib/net48/
+    Teraz FILE->SAVE AS/ Ta sama lokacja ale nowa wersja będzie w nazwie
+    Teraz w PAckage manager console: Squirrel --releasify Tetris.1.0.1.nupkg
+    Teraz w Solucji: F:\Projekty_testowe\Tetris\Releases kopiujemy wszystko i wklejamy
+    w miejscu gdzie aplikacja sprawdza atualizacje  (F:\Temp\Releases)
+    
+    
+
+
+
+
+38.11: https://www.youtube.com/watch?v=jcUctrLC-7M <-- tetris guide
+27.06: https://www.youtube.com/watch?v=W8Qu4qMJyh4&t=1467s <-- Squirell.windows guide
 */
